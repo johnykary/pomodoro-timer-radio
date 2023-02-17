@@ -1,0 +1,14 @@
+.container{
+    display: flex;
+    gap: 10px;
+}
+
+.playButton {
+    background-color: #3498db;
+    color: white;
+}
+
+.pauseButton{
+    background-color: #e74c3c;
+    color: white;
+}
