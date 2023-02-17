@@ -1,47 +1,53 @@
-let timerInterval = null;
-
-function sendMessage(action) {
-  chrome.runtime.sendMessage({ action: action });
-  if (action === 'pause') {
-    clearInterval(timerInterval);
-    timerInterval = null;
-  }
-}
-
-function startTimer(duration, display) {
-  let timer = duration, minutes, seconds;
-  timerInterval = setInterval(function () {
-    minutes = parseInt(timer / 60, 10);
-    seconds = parseInt(timer % 60, 10);
-
-    minutes = minutes < 10 ? "0" + minutes : minutes;
-    seconds = seconds < 10 ? "0" + seconds : seconds;
-
-    display.textContent = minutes + ":" + seconds;
-
-    if (--timer < 0) {
-      timer = duration;
-      sendMessage('pause');
-      display.textContent = "25:00";
-      alert("Time's up!");
-    }
-  }, 1000);
+function sendMessage(action, callback) {
+  chrome.runtime.sendMessage({ action: action }, callback);
 }
 
 document.addEventListener('DOMContentLoaded', function() {
-  let twentyFiveMinutes = 60 * 25;
   let display = document.querySelector('#timer');
+  let timerInterval;
+
   display.textContent = "25:00";
 
   document.getElementById('playButton').addEventListener('click', function() {
-    if (timerInterval === null) {
-      startTimer(twentyFiveMinutes, display);
-    }
-    sendMessage('play');
+    sendMessage('play', function(response) {
+      startTimer(response.remainingTime);
+    });
   });
 
   document.getElementById('pauseButton').addEventListener('click', function() {
-    sendMessage('pause');
+    sendMessage('pause', function(response) {
+      resetTimer();
+    });
+  });
+
+  function startTimer(initialTime) {
+    let remainingSeconds = initialTime || 25 * 60;
+    let minutes, seconds;
+    let updateDisplay = function() {
+      minutes = parseInt(remainingSeconds / 60, 10);
+      seconds = parseInt(remainingSeconds % 60, 10);
+      minutes = minutes < 10 ? "0" + minutes : minutes;
+      seconds = seconds < 10 ? "0" + seconds : seconds;
+      display.textContent = minutes + ":" + seconds;
+      remainingSeconds--;
+      if (remainingSeconds < 0) {
+        clearInterval(timerInterval);
+        display.textContent = "00:00";
+        alert("Time's up!");
+      }
+    };
+    updateDisplay();
+    timerInterval = setInterval(updateDisplay, 1000);
+  }
+
+  function resetTimer() {
+    clearInterval(timerInterval);
     display.textContent = "25:00";
+  }
+
+  sendMessage('getStatus', function(response) {
+    if (response.remainingTime > 0) {
+      startTimer(response.remainingTime);
+    }
   });
 });
