@@ -1,14 +1,44 @@
-.container{
-    display: flex;
-    gap: 10px;
+button {
+  all: unset;
+  cursor: pointer;
+  padding: 10px 10px;
+  border-radius: 12px;
+  color: white;
+  transition-duration: 0.4s;
+}
+
+button:focus {
+  outline: orange 5px auto;
+}
+
+.container {
+  display: flex;
+  gap: 10px;
 }
 
 .playButton {
-    background-color: #3498db;
-    color: white;
+  background-color: #3498db;
 }
 
-.pauseButton{
-    background-color: #e74c3c;
-    color: white;
+.playButton:hover {
+  background-color: #258ed4; /* Green */
+  color: white;
+}
+
+.pauseButton {
+  background-color: #e74c3c;
+}
+
+.pauseButton:hover {
+  background-color: #e94735; /* Green */
+  color: white;
+}
+
+.timer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 20px 0px;
+  font-size: 15px;
+  font-weight: bold;
 }

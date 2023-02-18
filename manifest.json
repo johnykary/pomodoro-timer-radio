@@ -3,7 +3,7 @@
     "name": "Pomodoro radio timer",
     "description": "Pomodoro timer that plays music from freecodecamp radio",
     "version": "1.0",
-    "permissions": ["activeTab", "storage"],
+    "permissions": ["activeTab", "storage","notifications", "alarms"],
     "background": {
       "scripts": ["background.js"]
     },
