@@ -12,6 +12,16 @@ document.addEventListener("DOMContentLoaded", function () {
 
   timerDisplay.textContent = TWENTY_FIVE_MINUTES
 
+  const muteIcon = document.getElementById("muteIcon")
+
+  // Get the mute state using the Chrome storage API
+  chrome.storage.sync.get({ isMuted: false }, function (data) {
+    if (data.isMuted) {
+      muteIcon.classList.add("bi-volume-up");
+    } else {
+      muteIcon.classList.add("bi-volume-mute");
+    }
+  });
   document.getElementById("playButton").addEventListener("click", function () {
     sendMessage("play", function (response) {
       isOnBreak = false
@@ -27,8 +37,16 @@ document.addEventListener("DOMContentLoaded", function () {
 
   document.getElementById("muteButton").addEventListener("click", function () {
     sendMessage("mute", function (response) {
-      let icon = document.querySelector("#muteIcon")
-      icon.className = response.muted ? "fa fa-volume-up" : "fa fa-volume-off"
+      const muteIcon = document.getElementById("muteIcon")
+      if (response.muted) {
+        muteIcon.classList.remove("bi-volume-mute");
+        muteIcon.classList.add("bi-volume-up");
+      } else {
+        muteIcon.classList.remove("bi-volume-up");
+        muteIcon.classList.add("bi-volume-mute");
+      }
+
+      chrome.storage.sync.set({ isMuted: response.muted })
     })
   })
 

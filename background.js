@@ -34,7 +34,6 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
 })
 
 
-
 chrome.alarms.onAlarm.addListener((req) => {
   if (req.name === "break") {
     chrome.notifications.create(
@@ -108,3 +107,4 @@ function stopTimer() {
 async function breakTimer() {
   startTimer(FIVE_MINUTES)
 }
+
