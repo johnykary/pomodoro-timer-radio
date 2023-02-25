@@ -2,7 +2,6 @@ const TWENTY_FIVE_MINUTES = "25:00"
 const FIVE_MINUTES = "05:00"
 let isOnBreak = false
 
-
 function sendMessage(action, callback) {
   chrome.runtime.sendMessage({ action: action }, callback)
 }
@@ -23,6 +22,13 @@ document.addEventListener("DOMContentLoaded", function () {
   document.getElementById("pauseButton").addEventListener("click", function () {
     sendMessage("pause", function (response) {
       resetTimer()
+    })
+  })
+
+  document.getElementById("muteButton").addEventListener("click", function () {
+    sendMessage("mute", function (response) {
+      let icon = document.querySelector("#muteIcon")
+      icon.className = response.muted ? "fa fa-volume-up" : "fa fa-volume-off"
     })
   })
 

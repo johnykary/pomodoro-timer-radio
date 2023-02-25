@@ -24,6 +24,11 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
       remainingTime = 0
       stopTimer()
     }
+  }else if(request.action === "mute"){
+    if(isPlaying){
+      audio.muted = audio.muted ? false : true;
+      sendResponse({muted: audio.muted})
+    }
   }
   sendResponse({ remainingTime: remainingTime })
 })
